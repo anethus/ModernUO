@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Server.Mobiles;
 
@@ -49,4 +49,14 @@ public static class MonsterAbilities
     public static ReflectPhysicalDamage ReflectPhysicalDamage => new();
 
     public static BloodBathAttack BloodBathAttack => new();
+
+    // Orcs ability
+
+    public static ThrowParalyzed ThrowParalyzed => new();
+
+    public static CallForArmy CallForArmy => new();
+
+    public static CallForSlackers CallForSlackers => new();
+
+    public static BecomeSlave BecomeSlave => new();
 }

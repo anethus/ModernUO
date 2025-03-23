@@ -1,4 +1,4 @@
-﻿namespace Server.Mobiles;
+namespace Server.Mobiles;
 
 public enum MonsterAbilityType
 {
@@ -20,5 +20,9 @@ public enum MonsterAbilityType
     FanningFire, // Fire debuff
     RuneCorruption,
     FanThrow,
-    BloodBath
+    BloodBath,
+    ThrowParalyzed,
+    CallForArmy,
+    CallForSlackers,
+    BecomeSlave
 }

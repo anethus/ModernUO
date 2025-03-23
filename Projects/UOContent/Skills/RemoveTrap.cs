@@ -127,6 +127,16 @@ namespace Server.SkillHandlers
                         }
                     }
                 }
+                else if (targeted is ScoutGong trab)
+                {
+                    if (from.CheckTargetSkill(SkillName.RemoveTrap, trab, trab.TrapPower, trab.TrapPower + 30))
+                    {
+                        trab.TrapPower = 0;
+                        trab.TrapLevel = 0;
+                        trab.TrapType = TrapType.None;
+                        from.SendLocalizedMessage(502377); // You successfully render the trap harmless
+                    }
+                }
                 else
                 {
                     from.SendLocalizedMessage(502373); // That doesn't appear to be trapped
