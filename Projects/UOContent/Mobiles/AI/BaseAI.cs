@@ -27,7 +27,10 @@ public enum AIType
     AI_Mage,
     AI_Berserk,
     AI_Predator,
-    AI_Thief
+    AI_Thief,
+    AI_Boss,
+    AI_Scout,
+    AI_MeleWithFlee
 }
 
 public enum ActionType
@@ -37,7 +40,8 @@ public enum ActionType
     Guard,
     Flee,
     Backoff,
-    Interact
+    Interact,
+    SpecialPhase
 }
 
 public abstract class BaseAI
@@ -858,6 +862,11 @@ public abstract class BaseAI
                     m_Mobile.OnActionBackoff();
                     return DoActionBackoff();
                 }
+            case ActionType.SpecialPhase:
+                {
+                    m_Mobile.OnActionSpecialPhase();
+                    return DoActionBackoff();
+                }
 
             default:
                 {
@@ -892,7 +901,14 @@ public abstract class BaseAI
                     m_Mobile.Warmode = true;
                     m_Mobile.FocusMob = null;
                     m_Mobile.Combatant = null;
-                    m_NextStopGuard = Core.TickCount + (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
+                    if (m_Mobile.CurrentWayPoint != null)
+                    {
+                        m_NextStopGuard = Core.TickCount + (int)TimeSpan.FromSeconds(20).TotalMilliseconds;
+                    }
+                    else
+                    {
+                        m_NextStopGuard = Core.TickCount + (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
+                    }
                     m_Mobile.SetCurrentSpeedToActive();
                     break;
                 }
@@ -1038,7 +1054,7 @@ public abstract class BaseAI
         {
             if (m_Mobile.Debug)
             {
-                m_Mobile.DebugSay("I am on guard");
+                //m_Mobile.DebugSay("I am on guard");
             }
             // m_Mobile.Turn( Utility.Random(0, 2) - 1 );
         }
@@ -1091,7 +1107,42 @@ public abstract class BaseAI
 
     public virtual bool DoActionInteract() => true;
 
-    public virtual bool DoActionBackoff() => true;
+    public virtual bool DoActionBackoff()
+    {
+        if (m_Mobile.CurrentWayPoint != null)
+        {
+            var point = m_Mobile.CurrentWayPoint;
+
+            if (point.Deleted || point.Map != m_Mobile.Map)
+            {
+                Action = ActionType.Wander;
+                return true;
+            }
+
+            var distance = m_Mobile.GetDistanceToSqrt(point.Location);
+
+            if (distance > 3.0)
+            {
+                if (m_Mobile.Debug)
+                {
+                    m_Mobile.DebugSay("I will move towards my waypoint.");
+                }
+
+                DoMove(m_Mobile.GetDirectionTo(m_Mobile.CurrentWayPoint));
+            }
+            else if (OnAtWayPoint())
+            {
+                m_Mobile.CurrentWayPoint = null;
+                m_Mobile.MoveSpeedMod = 1;
+
+                Action = ActionType.Guard;
+            }
+        }
+
+        return true;
+    }
+
+    public virtual bool DoActionSpecialPhase() => true;
 
     public virtual bool Obey() =>
         !m_Mobile.Deleted && m_Mobile.ControlOrder switch
@@ -2651,10 +2702,10 @@ public abstract class BaseAI
             }
 
             // Staff members cannot be targeted.
-            if (m.AccessLevel > AccessLevel.Player)
-            {
-                continue;
-            }
+            //if (m.AccessLevel > AccessLevel.Player)
+            //{
+            //    continue;
+            //}
 
             // Does it have to be a player?
             if (bPlayerOnly && !m.Player)

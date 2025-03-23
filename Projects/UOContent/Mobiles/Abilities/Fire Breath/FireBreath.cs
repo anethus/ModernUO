@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Server.Spells.Bushido;
 
 namespace Server.Mobiles;
@@ -51,16 +51,22 @@ public class FireBreath : MonsterAbility
     {
         if (CanFireBreathTarget(source, target))
         {
-            BreathStallMovement(source);
-            BreathPlayAngerSound(source);
-            BreathPlayAngerAnimation(source);
-
             source.Direction = source.GetDirectionTo(target);
 
-            Timer.StartTimer(TimeSpan.FromSeconds(BreathEffectDelay), () => BreathEffect_Callback(source, target));
+            BreathStallMovement(source);
+
+
+            Timer.StartTimer(TimeSpan.FromSeconds(BreathStallTime/ 2), () => StallEffect_Callback(source, target));
 
             base.Trigger(trigger, source, target);
         }
+    }
+
+    public void StallEffect_Callback(BaseCreature source, Mobile target)
+    {
+        BreathPlayAngerSound(source);
+        BreathPlayAngerAnimation(source);
+        Timer.StartTimer(TimeSpan.FromSeconds(BreathEffectDelay), () => BreathEffect_Callback(source, target));
     }
 
     public virtual bool CanFireBreathTarget(BaseCreature source, Mobile target)

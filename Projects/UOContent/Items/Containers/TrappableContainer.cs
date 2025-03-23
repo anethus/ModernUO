@@ -9,7 +9,8 @@ public enum TrapType
     MagicTrap,
     ExplosionTrap,
     DartTrap,
-    PoisonTrap
+    PoisonTrap,
+    Alarm
 }
 
 [SerializationGenerator(3, false)]
