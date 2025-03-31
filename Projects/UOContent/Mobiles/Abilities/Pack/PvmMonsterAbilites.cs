@@ -82,7 +82,7 @@ namespace Server.Custom.PvM
                     //EssenceOfWindSpell.DoEffect(target, 31, 5, 60, 60, 60, TimeSpan.FromSeconds(30));
 
                     var spell = new EssenceOfWindSpell(from);
-                    spell.DoEffect(target, 31, 5, 60, TimeSpan.FromSeconds(30));
+                    //spell.DoEffect(target, 31, 5, 60, TimeSpan.FromSeconds(30));
                     debuffed--;
                 }
             });
