@@ -2344,6 +2344,11 @@ namespace Server.Mobiles
             ReceivedHonorContext?.OnTargetDamaged(from, amount);
             SentHonorContext?.OnSourceDamaged(from, amount);
 
+            if (willKill && from is RageCreature rc)
+            {
+                rc.ClearFromRageMeter(this);
+            }
+
             if (willKill && from is PlayerMobile mobile)
             {
                 Timer.StartTimer(TimeSpan.FromSeconds(10), mobile.RecoverAmmo);

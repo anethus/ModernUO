@@ -255,7 +255,7 @@ public abstract class BaseAI
     {
         var currentCombat = m_Mobile.Combatant;
 
-        if (currentCombat != null && !aggressor.Hidden && currentCombat != aggressor &&
+        if (currentCombat != null && aggressor != currentCombat && !aggressor.Hidden && currentCombat != aggressor &&
             m_Mobile.GetDistanceToSqrt(currentCombat) > m_Mobile.GetDistanceToSqrt(aggressor))
         {
             m_Mobile.Combatant = aggressor;
@@ -2767,7 +2767,7 @@ public abstract class BaseAI
                 continue;
             }
 
-            if (acqType is FightMode.Aggressor or FightMode.Evil)
+            if (acqType is FightMode.Aggressor or FightMode.Evil or FightMode.RageLevel)
             {
                 var bValid = IsHostile(m);
 

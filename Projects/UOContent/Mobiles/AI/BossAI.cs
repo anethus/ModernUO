@@ -1,131 +1,62 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Mobiles
+namespace Server.Mobiles;
+
+public class BossAI : MeleeAI
 {
-    public class BossAI : BaseAI
+    public BossAI(BaseCreature m) : base(m)
     {
-        public BossAI(BaseCreature m) : base(m)
+    }
+
+    public override bool DoActionCombat()
+    {
+        if (m_Mobile is not RageCreature rc)
         {
-            m_Mobile.PublicOverheadMessage(MessageType.Regular, 44, false, ">> BossAI Generated <<");
+            return base.DoActionCombat();
         }
 
-        public override bool DoActionWander()
+        if (m_Mobile.Combatant != rc.GetTopRageMobile())
         {
-            if (AcquireFocusMob(m_Mobile.RangePerception, m_Mobile.FightMode, false, false, true))
+            if (!AcquireFocusMob(m_Mobile.RangePerception, m_Mobile.FightMode, false, false, true))
             {
-                if (m_Mobile.Debug)
-                {
-                    m_Mobile.DebugSay($"I have detected {m_Mobile.FocusMob.Name}, attacking");
-                }
-                m_Mobile.Combatant = m_Mobile.FocusMob;
-                Action = ActionType.Combat;
+                return base.DoActionCombat();
             }
 
-            return base.DoActionWander();
+            m_Mobile.DebugSay($">> CHANGING TARGET BY RAGE: {m_Mobile.FocusMob.Name}");
+
+            m_Mobile.Combatant = m_Mobile.FocusMob;
+            return base.DoActionCombat();
         }
 
-        public override bool DoActionCombat()
+        return base.DoActionCombat();
+    }
+
+    public override bool AcquireFocusMob(int iRange, FightMode acqType, bool bPlayerOnly, bool bFacFriend, bool bFacFoe)
+    {
+        if (acqType == FightMode.RageLevel && m_Mobile is RageCreature rc)
         {
-            var combatant = m_Mobile.Combatant;
-
-            if (combatant == null || combatant.Deleted || combatant.Map != m_Mobile.Map || !combatant.Alive ||
-                combatant.IsDeadBondedPet)
+            if (rc.TauntedBy != null)
             {
-                if (m_Mobile.Debug)
-                {
-                    m_Mobile.DebugSay("My combatant is gone, so my guard is up");
-                }
-
-                Action = ActionType.Guard;
+                m_Mobile.FocusMob = rc.TauntedBy;
                 return true;
             }
 
-            if (!m_Mobile.InRange(combatant, m_Mobile.RangePerception))
+            var rageMob = rc.GetTopRageMobile();
+
+            if (rageMob != null && rageMob.Alive && rageMob.Map == m_Mobile.Map)
             {
-                // They are somewhat far away, can we find something else?
-
-                if (AcquireFocusMob(m_Mobile.RangePerception, m_Mobile.FightMode, false, false, true))
-                {
-                    m_Mobile.Combatant = m_Mobile.FocusMob;
-                    m_Mobile.FocusMob = null;
-                }
-                else if (!m_Mobile.InRange(combatant, m_Mobile.RangePerception * 3))
-                {
-                    m_Mobile.Combatant = null;
-                }
-
-                combatant = m_Mobile.Combatant;
-
-                if (combatant == null)
-                {
-                    if (m_Mobile.Debug)
-                    {
-                        m_Mobile.DebugSay("My combatant has fled, so I am on guard");
-                    }
-
-                    Action = ActionType.Guard;
-                    return true;
-                }
+                m_Mobile.FocusMob = rageMob;
+                return true;
             }
-
-            if (!MoveTo(combatant, true, m_Mobile.RangeFight))
-            {
-                m_Mobile.Direction = m_Mobile.GetDirectionTo(combatant);
-                if (AcquireFocusMob(m_Mobile.RangePerception, m_Mobile.FightMode, false, false, true))
-                {
-                    if (m_Mobile.Debug)
-                    {
-                        m_Mobile.DebugSay($"My move is blocked, so I am going to attack {m_Mobile.FocusMob!.Name}");
-                    }
-
-                    m_Mobile.Combatant = m_Mobile.FocusMob;
-                    Action = ActionType.Combat;
-                    return true;
-                }
-
-                if (m_Mobile.GetDistanceToSqrt(combatant) > m_Mobile.RangePerception + 1)
-                {
-                    if (m_Mobile.Debug)
-                    {
-                        m_Mobile.DebugSay($"I cannot find {combatant.Name}, so my guard is up");
-                    }
-
-                    Action = ActionType.Guard;
-                    return true;
-                }
-
-                if (m_Mobile.Debug)
-                {
-                    m_Mobile.DebugSay($"I cannot find {combatant.Name}, so my guard is up");
-                }
-            }
-            else if (Core.TickCount - m_Mobile.LastMoveTime > 400)
-            {
-                m_Mobile.Direction = m_Mobile.GetDirectionTo(combatant);
-            }
-
-            if (!m_Mobile.Controlled && !m_Mobile.Summoned && m_Mobile.CanFlee)
-            {
-                if (m_Mobile.Hits < m_Mobile.HitsMax * 20 / 100)
-                {
-                    Action = ActionType.SpecialPhase;
-                    return true;
-                }
-            }
-
-            if (m_Mobile.TriggerAbility(MonsterAbilityTrigger.CombatAction, combatant))
-            {
-                if (m_Mobile.Debug)
-                {
-                    m_Mobile.DebugSay("I used my abilities!");
-                }
-            }
-
-            return true;
         }
+
+        return base.AcquireFocusMob(iRange, acqType, bPlayerOnly, bFacFriend, bFacFoe);
     }
 }
+
+

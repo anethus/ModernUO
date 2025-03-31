@@ -3,13 +3,14 @@ using ModernUO.Serialization;
 namespace Server.Mobiles.Monsters;
 
 [SerializationGenerator(0, false)]
-public partial class OrcHunter: BaseCreature
+public partial class OrcMaster : RageCreature
 {
-    public override string DefaultName => "a wolf";
+    public override string DefaultName => "an orc master";
+
     [Constructible]
-    public OrcHunter() : base(AIType.AI_Boss)
+    public OrcMaster() : base(AIType.AI_Boss)
     {
-        Body = 76;
+        Body = 7;
         BaseSoundID = 0x1B0;
         RangePerception = 10;
         Debug = true;
@@ -20,7 +21,7 @@ public partial class OrcHunter: BaseCreature
 
         SetHits(298, 315);
 
-        SetDamage(16, 22);
+        SetDamage(2, 4);
 
         SetDamageType(ResistanceType.Physical, 40);
         SetDamageType(ResistanceType.Fire, 40);
@@ -44,12 +45,5 @@ public partial class OrcHunter: BaseCreature
         Tamable = false;
         FollowersMax = 1;
     }
-
-    public override string CorpseName => "an wolf corpse";
-    public override bool IsDispellable => false;
-    public override bool IsBondable => false;
-    public override FoodType FavoriteFood => FoodType.Meat;
-
-    private static MonsterAbility[] _abilities = { MonsterAbilities.BecomeSlave };
-    public override MonsterAbility[] GetMonsterAbilities() => _abilities;
 }
+
