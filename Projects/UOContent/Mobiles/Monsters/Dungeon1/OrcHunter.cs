@@ -7,7 +7,7 @@ public partial class OrcHunter: BaseCreature
 {
     public override string DefaultName => "a wolf";
     [Constructible]
-    public OrcHunter() : base(AIType.AI_Boss)
+    public OrcHunter() : base(AIType.AI_BossWithSpecial)
     {
         Body = 76;
         BaseSoundID = 0x1B0;

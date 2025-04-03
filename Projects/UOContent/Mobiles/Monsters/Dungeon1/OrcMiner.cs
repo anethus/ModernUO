@@ -1,14 +1,14 @@
 using ModernUO.Serialization;
 
-namespace Server.Mobiles.Monsters;
+namespace Server.Mobiles;
 
 [SerializationGenerator(0, false)]
-public partial class OrcMaster : RageCreature
+public partial class OrcMiner: BaseCreature
 {
     public override string DefaultName => "an orc master";
 
     [Constructible]
-    public OrcMaster() : base(AIType.AI_ThreatBoss)
+    public OrcMiner() : base(AIType.AI_BossWithSpecial)
     {
         Body = 7;
         BaseSoundID = 0x1B0;
@@ -45,5 +45,7 @@ public partial class OrcMaster : RageCreature
         Tamable = false;
         FollowersMax = 1;
     }
-}
 
+    private static MonsterAbility[] _abilities = { MonsterAbilities.SunderArmor };
+    public override MonsterAbility[] GetMonsterAbilities() => _abilities;
+}

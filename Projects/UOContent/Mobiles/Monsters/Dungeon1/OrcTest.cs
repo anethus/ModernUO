@@ -3,14 +3,13 @@ using ModernUO.Serialization;
 namespace Server.Mobiles.Monsters;
 
 [SerializationGenerator(0, false)]
-public partial class OrcMaster : RageCreature
+public partial class OrcTest : BaseCreature
 {
-    public override string DefaultName => "an orc master";
-
+    public override string DefaultName => "orc TEST";
     [Constructible]
-    public OrcMaster() : base(AIType.AI_ThreatBoss)
+    public OrcTest() : base(AIType.AI_Melee)
     {
-        Body = 7;
+        Body = 76;
         BaseSoundID = 0x1B0;
         RangePerception = 10;
         Debug = true;
@@ -21,7 +20,7 @@ public partial class OrcMaster : RageCreature
 
         SetHits(298, 315);
 
-        SetDamage(2, 4);
+        SetDamage(16, 22);
 
         SetDamageType(ResistanceType.Physical, 40);
         SetDamageType(ResistanceType.Fire, 40);
@@ -45,5 +44,12 @@ public partial class OrcMaster : RageCreature
         Tamable = false;
         FollowersMax = 1;
     }
-}
 
+    public override string CorpseName => "an orc TEST";
+    public override bool IsDispellable => false;
+    public override bool IsBondable => false;
+    public override FoodType FavoriteFood => FoodType.Meat;
+
+    private static MonsterAbility[] _abilities = { MonsterAbilities.SunderArmor };
+    public override MonsterAbility[] GetMonsterAbilities() => _abilities;
+}

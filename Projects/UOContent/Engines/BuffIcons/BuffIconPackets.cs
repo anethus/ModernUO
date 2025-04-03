@@ -12,7 +12,8 @@ public static class BuffIconPackets
         int titleCliloc,
         int secondaryCliloc,
         TextDefinition args,
-        long seconds
+        long seconds,
+        uint stack
     )
     {
         if (ns.CannotSendPackets())
@@ -31,7 +32,7 @@ public static class BuffIconPackets
         writer.Write(0);
 
         writer.Write((short)iconID);
-        writer.Write((short)0x1); // command (0 = remove, 1 = add, 2 = data)
+        writer.Write((short)stack);
         writer.Write(0);
 
         writer.Write((short)seconds);

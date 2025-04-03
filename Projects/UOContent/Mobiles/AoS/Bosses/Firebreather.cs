@@ -1,9 +1,4 @@
 using ModernUO.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.Mobiles.AoS.Bosses
 {
@@ -11,7 +6,7 @@ namespace Server.Mobiles.AoS.Bosses
     public partial class Firebreather: BaseCreature
     {
         [Constructible]
-        public Firebreather(): base(AIType.AI_Boss, FightMode.Aggressor, 8)
+        public Firebreather(): base(AIType.AI_BossWithSpecial, FightMode.Aggressor, 8)
         {
             Body = 808;
             BaseSoundID = 0xA3;

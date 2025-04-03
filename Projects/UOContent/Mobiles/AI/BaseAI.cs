@@ -28,9 +28,10 @@ public enum AIType
     AI_Berserk,
     AI_Predator,
     AI_Thief,
-    AI_Boss,
+    AI_ThreatBoss,
     AI_Scout,
-    AI_MeleWithFlee
+    AI_MeleWithFlee,
+    AI_BossWithSpecial
 }
 
 public enum ActionType
@@ -865,7 +866,7 @@ public abstract class BaseAI
             case ActionType.SpecialPhase:
                 {
                     m_Mobile.OnActionSpecialPhase();
-                    return DoActionBackoff();
+                    return DoActionSpecialPhase();
                 }
 
             default:

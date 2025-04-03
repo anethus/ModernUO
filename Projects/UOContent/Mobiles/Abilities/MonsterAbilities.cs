@@ -59,4 +59,6 @@ public static class MonsterAbilities
     public static CallForSlackers CallForSlackers => new();
 
     public static BecomeSlave BecomeSlave => new();
+
+    public static SunderArmor SunderArmor => new();
 }

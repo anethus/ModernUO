@@ -4506,7 +4506,8 @@ namespace Server.Mobiles
                 buffInfo.TitleCliloc,
                 buffInfo.SecondaryCliloc,
                 buffInfo.Args,
-                seconds
+                seconds,
+                buffInfo.Stack
             );
         }
 
@@ -4535,6 +4536,36 @@ namespace Server.Mobiles
             m_BuffTable.Add(b.ID, b);
 
             SendAddBuffPacket(b);
+        }
+
+        public void AddBuffStack(BuffInfo b)
+        {
+            if (!BuffInfo.Enabled || b == null)
+            {
+                return;
+            }
+
+            m_BuffTable ??= new Dictionary<BuffIcon, BuffInfo>();
+
+            m_BuffTable.TryGetValue(b.ID, out var buff);
+
+            if (buff == null)
+            {
+                b.StartTimer(this);
+                m_BuffTable.Add(b.ID, b);
+                SendAddBuffPacket(b);
+            }
+            else if (buff.Stack < buff.MaxStackSize)
+            {
+                buff.StartTimer(this);
+                buff.Stack += 1;
+                SendAddBuffPacket(buff);
+            }
+            else
+            {
+                buff.StartTimer(this);
+                SendAddBuffPacket(buff);
+            }
         }
 
         public void RemoveBuff(BuffIcon b)

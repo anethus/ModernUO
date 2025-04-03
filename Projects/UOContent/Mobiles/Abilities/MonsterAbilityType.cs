@@ -24,5 +24,7 @@ public enum MonsterAbilityType
     ThrowParalyzed,
     CallForArmy,
     CallForSlackers,
-    BecomeSlave
+    BecomeSlave,
+    ThrowBarrel,
+    ShatterArmor,
 }

@@ -9,14 +9,14 @@ public class BuffInfo
 
     public BuffInfo(
         BuffIcon iconID, int titleCliloc, TimeSpan duration = default, TextDefinition args = null,
-        bool retainThroughDeath = false
-    ) : this(iconID, titleCliloc, titleCliloc + 1, duration, args, retainThroughDeath)
+        bool retainThroughDeath = false, uint maxStackSize = 1
+    ) : this(iconID, titleCliloc, titleCliloc + 1, duration, args, retainThroughDeath, maxStackSize, 1)
     {
     }
 
     public BuffInfo(
         BuffIcon iconID, int titleCliloc, int secondaryCliloc, TimeSpan duration = default, TextDefinition args = null,
-        bool retainThroughDeath = false
+        bool retainThroughDeath = false, uint maxStackSize = 1, uint stack = 1
     )
     {
         ID = iconID;
@@ -25,6 +25,8 @@ public class BuffInfo
         Duration = duration;
         Args = args;
         RetainThroughDeath = retainThroughDeath;
+        Stack = stack;
+        MaxStackSize = maxStackSize;
     }
 
     public static bool Enabled { get; private set; }
@@ -42,6 +44,9 @@ public class BuffInfo
     public bool RetainThroughDeath { get; }
 
     public TextDefinition Args { get; }
+
+    public uint Stack { get; set; }
+    public uint MaxStackSize { get; }
 
     public static void Configure()
     {
