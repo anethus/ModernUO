@@ -3074,6 +3074,7 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
 
     public virtual int GetResistance(ResistanceType type)
     {
+
         var v = (int)type;
 
         if (Resistances == null || Resistances.Length == 0 || v < 0 || v >= Resistances.Length)

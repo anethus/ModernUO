@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Server.Mobiles;
 
@@ -6,7 +6,7 @@ public class GraspingClaw : MonsterAbilitySingleTargetDoT
 {
     public override MonsterAbilityType AbilityType => MonsterAbilityType.GraspingClaw;
     public override MonsterAbilityTrigger AbilityTrigger => MonsterAbilityTrigger.GiveMeleeDamage;
-    public override double ChanceToTrigger => 0.10;
+    public override double ChanceToTrigger => 1.0;
 
     private const string Name = "GraspingClaw";
 

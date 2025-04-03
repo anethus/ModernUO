@@ -36,10 +36,13 @@ namespace Server.Mobiles
 
             RageMeters.Sort((x, y) => y.RageLevel.CompareTo(x.RageLevel));
 
-            DebugSay($"======================");
-            DebugSay($"RAGE level for {from.Name} = {RageMeters.Where(x => x.Source.Serial == from.Serial).FirstOrDefault().RageLevel}");
-            DebugSay($"RAGE Najbardziej mnie wkurwia: {RageMeters.FirstOrDefault().Source.Name}");
-            DebugSay($"======================");
+            if (Debug)
+            {
+                DebugSay($"======================");
+                DebugSay($"RAGE level for {from.Name} = {RageMeters.Where(x => x.Source.Serial == from.Serial).FirstOrDefault().RageLevel}");
+                DebugSay($"RAGE Najbardziej mnie wkurwia: {RageMeters.FirstOrDefault().Source.Name}");
+                DebugSay($"======================");
+            }
 
             base.OnDamage(amount, from, willKill);
         }

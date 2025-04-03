@@ -21,7 +21,7 @@ public class BuffIconPacketTests
         ).Compile();
 
         var ns = PacketTestUtilities.CreateTestNetState();
-        ns.SendAddBuffPacket((Serial)mob, iconID, titleCliloc, secondaryCliloc, args, (int)timeSpan.TotalMilliseconds);
+        ns.SendAddBuffPacket((Serial)mob, iconID, titleCliloc, secondaryCliloc, args, (int)timeSpan.TotalMilliseconds, 1);
 
         var result = ns.SendPipe.Reader.AvailableToRead();
         AssertThat.Equal(result, expected);

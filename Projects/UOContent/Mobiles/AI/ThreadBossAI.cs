@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Server.Mobiles;
 
-public class BossAI : MeleeAI
+public class ThreatBossAI : MeleeAI
 {
-    public BossAI(BaseCreature m) : base(m)
+    public ThreatBossAI(BaseCreature m) : base(m)
     {
     }
 
@@ -27,7 +20,7 @@ public class BossAI : MeleeAI
                 return base.DoActionCombat();
             }
 
-            m_Mobile.DebugSay($">> CHANGING TARGET BY RAGE: {m_Mobile.FocusMob.Name}");
+            //m_Mobile.DebugSay($">> CHANGING TARGET BY RAGE: {m_Mobile.FocusMob.Name}");
 
             m_Mobile.Combatant = m_Mobile.FocusMob;
             return base.DoActionCombat();
